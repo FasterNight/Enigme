@@ -39,6 +39,12 @@ public class Player : MonoBehaviour
 
     private bool readyToJump = true;
 
+    public GameObject bulletPrefab;
+    public GameObject attackPrefab;
+    public float bulletForce = 50f;
+    public Transform shootPoint;
+    float Cooldown = 0.2f;
+
 
     // Start is called before the first frame update
     void Start()
@@ -105,7 +111,73 @@ public class Player : MonoBehaviour
         {
             rigidbody.drag = 0f;
         }
+
+       
+        // ShootGun
+        if (Input.GetMouseButton(0) && Cooldown <= 0)
+        {
+            Shoot();
+            Cooldown = 0.2f;
+        }
+        if (Cooldown > 0)
+        {
+            Cooldown -= Time.deltaTime;
+        }
+
+        // Sword
+        if (Input.GetMouseButtonDown(1)) 
+        {
+            Attack();
+        }
     }
+
+    void Attack()
+    {
+        GameObject Sword = Instantiate(attackPrefab, shootPoint.position, shootPoint.rotation);
+
+        Collider playerCollider = GetComponent<Collider>();
+        Collider bulletCollider = Sword.GetComponent<Collider>();
+        if (playerCollider != null && bulletCollider != null)
+        {
+            Physics.IgnoreCollision(bulletCollider, playerCollider);
+        }
+
+
+        Sword.GetComponent<MeshRenderer>().enabled = true;
+        Sword.GetComponent<BoxCollider>().enabled = true;
+
+        Rigidbody rb = Sword.GetComponent<Rigidbody>();
+
+        if (rb != null)
+        {
+            rb.isKinematic = false;
+            rb.velocity = Orientation.forward * bulletForce/100;
+        }
+    }
+
+    void Shoot()
+    {
+        GameObject bullet = Instantiate(bulletPrefab, shootPoint.position, shootPoint.rotation);
+
+        Collider playerCollider = GetComponent<Collider>();
+        Collider bulletCollider = bullet.GetComponent<Collider>();
+        if (playerCollider != null && bulletCollider != null)
+        {
+            Physics.IgnoreCollision(bulletCollider, playerCollider);
+        }
+
+        bullet.GetComponent<MeshRenderer>().enabled = true;
+
+        Rigidbody rb = bullet.GetComponent<Rigidbody>();
+
+        if (rb != null)
+        {
+            rb.isKinematic = false;
+            rb.velocity = Orientation.forward * bulletForce;
+        }
+    }
+
+
 
     private void FixedUpdate()
     {

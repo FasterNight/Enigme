@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using StarterAssets;
@@ -8,7 +9,7 @@ public class Camera : MonoBehaviour
 {
 
     public Transform target; 
-    public Vector3 offset = new Vector3(0, 3, -5); 
+    public Vector3 offset = new Vector3(0, 1, -10); 
     public float rotationSpeed = 3f; 
 
     private float yaw = 0f;
@@ -20,7 +21,8 @@ public class Camera : MonoBehaviour
         if (target != null)
         {
             transform.position = target.position + offset;
-            transform.LookAt(target);
+            Vector3 lookAtTarget = target.position + Vector3.up * 1.5f;
+            transform.LookAt(lookAtTarget);
         }
 
         Cursor.lockState = CursorLockMode.Locked;
@@ -30,7 +32,6 @@ public class Camera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-      
 
         if (target == null) return;
 
@@ -46,14 +47,11 @@ public class Camera : MonoBehaviour
 
        
         Quaternion rotation = Quaternion.Euler(pitch, yaw, 0f);  
-        transform.position = target.position + rotation * offset;  
+        transform.position = target.position + rotation * offset;
 
         // La caméra regarde toujours le Player
         transform.LookAt(target);
     }
-
-
-
 }
 
 
