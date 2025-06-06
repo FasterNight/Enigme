@@ -5,6 +5,7 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     float LifeTime = 5f;
+    GameObject bullet;
 
     // Start is called before the first frame update
     void Start()
@@ -15,6 +16,8 @@ public class Bullet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+
         if (LifeTime <= 0)
         {
             Destroy(gameObject);

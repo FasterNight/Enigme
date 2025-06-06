@@ -10,7 +10,8 @@ public class Camera : MonoBehaviour
 
     public Transform target; 
     public Vector3 offset = new Vector3(0, 1, -10); 
-    public float rotationSpeed = 3f; 
+    public float rotationSpeed = 3f;
+    public Transform Player;
 
     private float yaw = 0f;
     private float pitch = 0f;
@@ -49,7 +50,9 @@ public class Camera : MonoBehaviour
         Quaternion rotation = Quaternion.Euler(pitch, yaw, 0f);  
         transform.position = target.position + rotation * offset;
 
-        // La caméra regarde toujours le Player
+        Vector3 RotatePlayer = new Vector3(0, yaw, 0);
+        Player.transform.Rotate(RotatePlayer);
+
         transform.LookAt(target);
     }
 }

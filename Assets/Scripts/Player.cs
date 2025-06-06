@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Security.Cryptography;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -16,6 +13,8 @@ public class Player : MonoBehaviour
     private float jumpCooldown = 0.25f;
     [SerializeField]
     private float airMultiplier = 0.1f;
+    [SerializeField]
+    private Transform playerCamera;
 
     [Header("Keybinds")]
     [SerializeField]
@@ -23,9 +22,10 @@ public class Player : MonoBehaviour
 
     [Header("Other Settings")]
     [SerializeField]
-    private Transform Orientation;
-    [SerializeField]
     private LayerMask WhatIsGround;
+    [SerializeField]
+    private Transform Orientation;
+    private GameObject Camera;
 
     private float horizontalInput;
     private float verticalInput;
@@ -43,6 +43,7 @@ public class Player : MonoBehaviour
     public GameObject attackPrefab;
     public float bulletForce = 50f;
     public Transform shootPoint;
+    public Transform attackPoint;
     float Cooldown = 0.2f;
 
 
@@ -51,6 +52,8 @@ public class Player : MonoBehaviour
     {
         rigidbody = GetComponent<Rigidbody>();
         rigidbody.freezeRotation = true;
+
+        Camera = GameObject.Find("Main Camera");
     }
 
     private void MyInput()
@@ -133,26 +136,34 @@ public class Player : MonoBehaviour
 
     void Attack()
     {
-        GameObject Sword = Instantiate(attackPrefab, shootPoint.position, shootPoint.rotation);
+
+
+        Vector3 attackDirection = playerCamera.transform.forward;
+
+        Quaternion attackRotation = Quaternion.LookRotation(attackDirection, Vector3.up);
+       
+
+        GameObject swordHitbox = Instantiate(attackPrefab, attackPoint.position, attackRotation);
+
+        swordHitbox.transform.SetParent(gameObject.transform);
+
+        Sword swordScript = swordHitbox.GetComponent<Sword>();
+        if (swordScript != null)
+        {
+            swordScript.playerTransform = this.transform;
+        }
 
         Collider playerCollider = GetComponent<Collider>();
-        Collider bulletCollider = Sword.GetComponent<Collider>();
-        if (playerCollider != null && bulletCollider != null)
+        Collider hitboxCollider = swordHitbox.GetComponent<Collider>();
+        if (playerCollider != null && hitboxCollider != null)
         {
-            Physics.IgnoreCollision(bulletCollider, playerCollider);
+            Physics.IgnoreCollision(hitboxCollider, playerCollider);
         }
 
+        swordHitbox.GetComponent<MeshRenderer>().enabled = true;
+        swordHitbox.GetComponent<BoxCollider>().enabled = true;
+        
 
-        Sword.GetComponent<MeshRenderer>().enabled = true;
-        Sword.GetComponent<BoxCollider>().enabled = true;
-
-        Rigidbody rb = Sword.GetComponent<Rigidbody>();
-
-        if (rb != null)
-        {
-            rb.isKinematic = false;
-            rb.velocity = Orientation.forward * bulletForce/100;
-        }
     }
 
     void Shoot()
@@ -167,6 +178,7 @@ public class Player : MonoBehaviour
         }
 
         bullet.GetComponent<MeshRenderer>().enabled = true;
+        bullet.GetComponent<SphereCollider>().enabled = true;
 
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
 
