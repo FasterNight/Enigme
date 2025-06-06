@@ -150,6 +150,8 @@ GameObject:
   - component: {fileID: 7471926942099810811}
   - component: {fileID: 8120648039267462035}
   - component: {fileID: 3870575125552276653}
+  - component: {fileID: 2764118934253213752}
+  - component: {fileID: 3295259342449773827}
   m_Layer: 0
   m_Name: Cylinder
   m_TagString: Player
@@ -275,3 +277,39 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
+--- !u!114 &2764118934253213752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4757451349645659279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 946284bfaaa69eb40b80ac2b9e3102b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ennemyMaxNumber: 0
+  strongEnnemyMaxNumber: 1
+  maxRange: 40
+  ennemyPrefab: {fileID: 7790154280674075976, guid: 9557ae4cefe240b4daa75ec5bc523d48,
+    type: 3}
+  strongEnnemyPrefab: {fileID: 7790154280674075976, guid: 31e276cc3872d1c4ebe9ee603c5f411c,
+    type: 3}
+  ennemyCount: 0
+  strongEnnemyCount: 0
+--- !u!114 &3295259342449773827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4757451349645659279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 146bca668d3525d4eab6c9be0130cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isFireElement: 1
+  isIceElement: 0
+  elementApplicationValue: 50

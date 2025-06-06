@@ -52,10 +52,12 @@ public class EnnemySpawn : MonoBehaviour
     public void RemoveEnnemy()
     {
         ennemyCount -= 1;
+        ennemyMaxNumber += 1;
     }
     public void RemoveStrongEnnemy()
     {
         strongEnnemyCount -= 1;
+        strongEnnemyMaxNumber += 1;
     }
 
 }

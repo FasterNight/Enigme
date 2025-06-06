@@ -5,9 +5,10 @@ using UnityEngine;
 public class EnnemyScript : MonoBehaviour
 {
     public int baseHp, hp, damage;
-    public bool isInvincible, isDotInvincible, isTakingFireDot, isTakingIceDot;
+    public bool isInvincible, isDotInvincible, isTakingFireDot, isTakingIceDot, isStrongEnnemy;
     public float baseSpeed, speed, dotFire, dotIce, lastFireDot, lastIceDot, invincibleTimer, dotInvincibleTimer;
-
+    private FloatingBars healthBar, fireBar, iceBar;
+    //public ParticleSystem fireParticle, iceParticle;
 
     void Start()
     {
@@ -33,17 +34,26 @@ public class EnnemyScript : MonoBehaviour
         //-------------------- Check if dead --------------------
         if (hp <= 0)
         {
+            EnnemySpawn ennemySpawn = player.GetComponent<EnnemySpawn>();
+            if (!isStrongEnnemy)
+            {
+                ennemySpawn.RemoveEnnemy();
+            }
+            else
+            {
+                ennemySpawn.RemoveStrongEnnemy();
+            }
             Destroy(gameObject);
         }
 
         //------------------- Deplete dot if not applied for a while ------------------
         if (lastFireDot <= 0 && dotFire > 0 && isTakingFireDot == false)
         {
-            dotFire -= 1;
+            dotFire -= 0.2f;
         }
         if (lastIceDot <= 0 && dotIce > 0 && isTakingIceDot == false)
         {
-            dotIce -= 1;
+            dotIce -= 0.2f;
         }
         
         //-------------------- Timer for depleting dots --------------------
@@ -70,6 +80,9 @@ public class EnnemyScript : MonoBehaviour
         if (dotFire >= 100)
         {
             isTakingFireDot = true;
+            /*fireParticle = GetComponent<ParticleSystem>();
+            fireParticle.Play();
+            Destroy(gameObject, fireParticle.main.duration);*/
         }
         if (dotFire <= 0)
         {
@@ -114,14 +127,42 @@ public class EnnemyScript : MonoBehaviour
             }
         }
 
+        //-------------------- Update health bar --------------------
+        healthBar = GetComponentInChildren<FloatingBars>();
+        healthBar.UpdateHPBar(hp, baseHp);
+        fireBar = GetComponentInChildren<FloatingBars>();
+        fireBar.UpdateFireBar(dotFire, 100);
+        iceBar = GetComponentInChildren<FloatingBars>();
+        iceBar.UpdateIceBar(dotIce, 100);
+
     }
-    public void TakeDamage(int damage)
+    public void TakeDamage()
     {
         if (!isInvincible)
         {
-            //hp -= player.Damage;
-            isInvincible = true;
-            invincibleTimer = 0.3f; // Set invincibility duration
+            // Find the player GameObject
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null)
+            {
+                // Get the PlayerElementScript component from the player GameObject
+                PlayerElementScript playerElement = player.GetComponent<PlayerElementScript>();
+                if (playerElement != null)
+                {
+                    // Apply damage logic
+                    isInvincible = true;
+                    invincibleTimer = 0.3f; // Set invincibility duration
+                    if (playerElement.isFireElement)
+                    {
+                        dotFire += playerElement.elementApplicationValue;
+                        lastFireDot = 2.0f; // Reset the timer for fire dot
+                    }
+                    if (playerElement.isIceElement)
+                    {
+                        dotIce += playerElement.elementApplicationValue;
+                        lastIceDot = 2.0f; // Reset the timer for ice dot
+                    }
+                }
+            }
         }
     }
     public void TakeFireDot()
@@ -141,5 +182,14 @@ public class EnnemyScript : MonoBehaviour
             isDotInvincible = true;
             dotInvincibleTimer = 2.0f; // Set invincibility duration for dots
         }
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Attack" || collision.gameObject.tag == "Bullet" || collision.gameObject.tag == "Player")
+        {
+            TakeDamage();
+        }
+
     }
 }
