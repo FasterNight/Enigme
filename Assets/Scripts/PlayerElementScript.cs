@@ -15,15 +15,15 @@ public class PlayerElementScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-    }
-    private void FixedUpdate()
-    {
         if (Input.GetKeyDown(KeyCode.F))
         {
             isFireElement = !isFireElement;
             isIceElement = !isIceElement;
         }
+    }
+    private void FixedUpdate()
+    {
+
     }
 }
 

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnnemyScript : MonoBehaviour
 {
-    public int baseHp, hp, damage;
+    public int baseHp, hp, damage, damageTaken;
     public bool isInvincible, isDotInvincible, isTakingFireDot, isTakingIceDot, isStrongEnnemy;
     public float baseSpeed, speed, dotFire, dotIce, lastFireDot, lastIceDot, invincibleTimer, dotInvincibleTimer;
     private FloatingBars healthBar, fireBar, iceBar;
@@ -24,11 +24,16 @@ public class EnnemyScript : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //-------------------- Go to player --------------------
         GameObject player = GameObject.FindGameObjectWithTag("Player");
-        if (player != null) {
-            Vector3 direction = (player.transform.position - transform.position).normalized;
-            transform.position += direction * speed * Time.deltaTime;
+
+        //-------------------- Go to player --------------------
+        if (!isInvincible)
+        {
+            if (player != null)
+            {
+                Vector3 direction = (player.transform.position - transform.position).normalized;
+                transform.position += direction * speed * Time.deltaTime;
+            }
         }
 
         //-------------------- Check if dead --------------------
@@ -136,10 +141,11 @@ public class EnnemyScript : MonoBehaviour
         iceBar.UpdateIceBar(dotIce, 100);
 
     }
-    public void TakeDamage()
+    public void TakeDamage(int damageTaken)
     {
         if (!isInvincible)
         {
+            hp -= damageTaken;
             // Find the player GameObject
             GameObject player = GameObject.FindGameObjectWithTag("Player");
             if (player != null)
@@ -162,6 +168,8 @@ public class EnnemyScript : MonoBehaviour
                         lastIceDot = 2.0f; // Reset the timer for ice dot
                     }
                 }
+                PlayerSpecialAttacksScript playerSpecialAttacks = player.GetComponent<PlayerSpecialAttacksScript>();
+                playerSpecialAttacks.speAtkPts += 0.2f;
             }
         }
     }
@@ -186,10 +194,13 @@ public class EnnemyScript : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Attack" || collision.gameObject.tag == "Bullet" || collision.gameObject.tag == "Player")
+        if (collision.gameObject.tag == "Bullet")
         {
-            TakeDamage();
+            TakeDamage(3);
         }
-
+        if (collision.gameObject.tag == "Attack")
+        {
+            TakeDamage(10);
+        }
     }
 }

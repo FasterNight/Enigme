@@ -16,11 +16,11 @@ public class PlayerSpecialAttacksScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && speAtkPts >= 3)
+        if (Input.GetKeyDown(KeyCode.C) && speAtkPts >= 3)
         {
             speAtkLvl = 1;
         }
-        if (Input.GetKey(KeyCode.Space) && speAtkPts >= 3)
+        if (Input.GetKey(KeyCode.C) && speAtkPts >= 3)
         {
             speAtkCharge += Time.deltaTime;
             if (speAtkCharge >= 0.8f && speAtkPts >= (3 * speAtkLvl +3))
@@ -29,7 +29,7 @@ public class PlayerSpecialAttacksScript : MonoBehaviour
                 speAtkCharge = 0;
             }
         }
-        if (Input.GetKeyUp(KeyCode.Space) && speAtkLvl > 0 || speAtkCharge >= 1.2f)
+        if (Input.GetKeyUp(KeyCode.C) && speAtkLvl > 0 || speAtkCharge >= 1.2f)
         {
             speAtkPts -= 3 * speAtkLvl;
 
@@ -40,12 +40,13 @@ public class PlayerSpecialAttacksScript : MonoBehaviour
                 PlayerElementScript playerElement = player.GetComponent<PlayerElementScript>();
                 if (playerElement != null)
                 {
+                    Player playerScript = player.GetComponent<Player>();
                     if (playerElement.isFireElement)
                     {
                         switch (speAtkLvl)
                         {
                             case 1:
-                                // fireSpeAtk1
+                                Shoot();
                                 break;
 
                             case 2:
