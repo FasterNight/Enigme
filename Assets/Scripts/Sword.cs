@@ -6,7 +6,7 @@ using UnityEngine;
 public class Sword : MonoBehaviour
 {
     public Transform playerTransform; 
-    public float rotationSpeed = 500f; 
+    public float rotationSpeed = 50f; 
     public float lifeTime = 1f; 
     public float orbitRadius = 1f;
     private Transform Orientation;
