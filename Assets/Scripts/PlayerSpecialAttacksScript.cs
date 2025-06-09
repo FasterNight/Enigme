@@ -46,7 +46,6 @@ public class PlayerSpecialAttacksScript : MonoBehaviour
                         switch (speAtkLvl)
                         {
                             case 1:
-                                Shoot();
                                 break;
 
                             case 2:
