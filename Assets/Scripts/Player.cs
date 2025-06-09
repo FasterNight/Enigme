@@ -35,7 +35,7 @@ public class Player : MonoBehaviour
     private Rigidbody rigidbody;
 
     private float playerHeight = 1.55f;
-    private bool isGrounded;
+    public bool isGrounded;
 
     private bool readyToJump = true;
 
@@ -88,7 +88,7 @@ public class Player : MonoBehaviour
 
     }
 
-    private void Jump()
+    public void Jump()
     {
         rigidbody.velocity = new Vector3(rigidbody.velocity.x, 0f, rigidbody.velocity.z);
 
@@ -115,22 +115,26 @@ public class Player : MonoBehaviour
             rigidbody.drag = 0f;
         }
 
-       
-        // ShootGun
-        if (Input.GetMouseButton(0) && Cooldown <= 0)
-        {
-            Shoot();
-            Cooldown = 0.2f;
-        }
-        if (Cooldown > 0)
-        {
-            Cooldown -= Time.deltaTime;
-        }
 
-        // Sword
-        if (Input.GetMouseButtonDown(1)) 
+        PlayerSpecialAttacksScript playerSpecialAttacks = this.GetComponent<PlayerSpecialAttacksScript>();
+        if (!playerSpecialAttacks.isDoingSpecialAttack)
         {
-            Attack();
+            // ShootGun
+            if (Input.GetMouseButton(0) && Cooldown <= 0)
+            {
+                Shoot();
+                Cooldown = 0.2f;
+            }
+            if (Cooldown > 0)
+            {
+                Cooldown -= Time.deltaTime;
+            }
+
+            // Sword
+            if (Input.GetMouseButtonDown(1))
+            {
+                Attack();
+            }
         }
     }
 
@@ -166,8 +170,23 @@ public class Player : MonoBehaviour
 
     }
 
-    void Shoot()
+    public void Shoot()
     {
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        PlayerSpecialAttacksScript playerSpecialAttacks = player.GetComponent<PlayerSpecialAttacksScript>();
+        if (!playerSpecialAttacks.isDoingSpecialAttack || playerSpecialAttacks.isDoingSpecialAttackFire1)
+        {
+            bulletPrefab.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+        }
+        if (playerSpecialAttacks.isDoingSpecialAttackFire1)
+        {
+            bulletPrefab.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+        }
+        if (playerSpecialAttacks.isDoingSpecialAttackFire2)
+        {
+            bulletPrefab.transform.localScale = new Vector3(2f, 2f, 2f);
+        }
+
         GameObject bullet = Instantiate(bulletPrefab, shootPoint.position, shootPoint.rotation);
 
         Collider playerCollider = GetComponent<Collider>();

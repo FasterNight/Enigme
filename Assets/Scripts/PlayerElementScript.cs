@@ -9,13 +9,15 @@ public class PlayerElementScript : MonoBehaviour
     public int elementApplicationValue = 5;
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F))
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        PlayerSpecialAttacksScript playerSpecialAttacks = player.GetComponent<PlayerSpecialAttacksScript>();
+        if (Input.GetKeyDown(KeyCode.F) && playerSpecialAttacks.speAtkLvl == 0 && !playerSpecialAttacks.isDoingSpecialAttack)
         {
             isFireElement = !isFireElement;
             isIceElement = !isIceElement;

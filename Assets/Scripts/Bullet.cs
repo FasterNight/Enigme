@@ -27,4 +27,11 @@ public class Bullet : MonoBehaviour
             LifeTime -= Time.deltaTime;
         }
     }
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Untagged" || collision.gameObject.tag == "Ennemy")
+        {
+            Destroy(gameObject);
+        }
+    }
 }

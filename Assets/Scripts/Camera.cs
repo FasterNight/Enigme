@@ -13,8 +13,8 @@ public class Camera : MonoBehaviour
     public float rotationSpeed = 3f;
     public Transform Player;
 
-    private float yaw = 0f;
-    private float pitch = 0f;
+    public float yaw = 0f;
+    public float pitch = 0f;
 
     // Start is called before the first frame update
     private void Start()
@@ -36,11 +36,14 @@ public class Camera : MonoBehaviour
 
         if (target == null) return;
 
-        
-        yaw += Input.GetAxis("Mouse X") * rotationSpeed;  
-        pitch -= Input.GetAxis("Mouse Y") * rotationSpeed;  
-        pitch = Mathf.Clamp(pitch, -30f, 60f); 
-        
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        PlayerSpecialAttacksScript playerSpecialAttacks = player.GetComponent<PlayerSpecialAttacksScript>();
+        if (!playerSpecialAttacks.isDoingSpecialAttackFire2)
+        {
+            yaw += Input.GetAxis("Mouse X") * rotationSpeed;
+            pitch -= Input.GetAxis("Mouse Y") * rotationSpeed;
+            pitch = Mathf.Clamp(pitch, -30f, 60f);
+        }
     }
     void LateUpdate()
     {

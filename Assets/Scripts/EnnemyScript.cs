@@ -148,28 +148,40 @@ public class EnnemyScript : MonoBehaviour
             hp -= damageTaken;
             // Find the player GameObject
             GameObject player = GameObject.FindGameObjectWithTag("Player");
+            PlayerSpecialAttacksScript playerSpecialAttacks = player.GetComponent<PlayerSpecialAttacksScript>();
+            PlayerElementScript playerElement = player.GetComponent<PlayerElementScript>();
+
             if (player != null)
             {
+                if (!playerSpecialAttacks.isDoingSpecialAttack)
+                {
+                    playerSpecialAttacks.speAtkPts += 0.2f;
+                }
                 // Get the PlayerElementScript component from the player GameObject
-                PlayerElementScript playerElement = player.GetComponent<PlayerElementScript>();
                 if (playerElement != null)
                 {
                     // Apply damage logic
                     isInvincible = true;
-                    invincibleTimer = 0.3f; // Set invincibility duration
-                    if (playerElement.isFireElement)
+                    if (playerSpecialAttacks.isDoingSpecialAttack)
+                    {
+                        invincibleTimer = 0.0f; // Set invincibility duration
+                    }
+                    else
+                    {
+                        invincibleTimer = 0.2f; // Set invincibility duration
+                    }
+                    if (playerElement.isFireElement && !isTakingFireDot)
                     {
                         dotFire += playerElement.elementApplicationValue;
                         lastFireDot = 2.0f; // Reset the timer for fire dot
                     }
-                    if (playerElement.isIceElement)
+                    if (playerElement.isIceElement && !isTakingIceDot)
                     {
                         dotIce += playerElement.elementApplicationValue;
                         lastIceDot = 2.0f; // Reset the timer for ice dot
                     }
                 }
-                PlayerSpecialAttacksScript playerSpecialAttacks = player.GetComponent<PlayerSpecialAttacksScript>();
-                playerSpecialAttacks.speAtkPts += 0.2f;
+
             }
         }
     }
@@ -196,6 +208,12 @@ public class EnnemyScript : MonoBehaviour
     {
         if (collision.gameObject.tag == "Bullet")
         {
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            PlayerSpecialAttacksScript playerSpecialAttacks = player.GetComponent<PlayerSpecialAttacksScript>();
+            if (playerSpecialAttacks.isDoingSpecialAttackFire2)
+            {
+                TakeDamage(27);
+            }
             TakeDamage(3);
         }
         if (collision.gameObject.tag == "Attack")
