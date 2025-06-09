@@ -34,7 +34,7 @@ public class Sword : MonoBehaviour
             float radians = currentAngle * Mathf.Deg2Rad;
             Vector3 offset = new Vector3(Mathf.Cos(radians), 0, Mathf.Sin(radians)) * orbitRadius;
             transform.position = playerTransform.position + offset;
-            transform.rotation = Orientation.rotation;
-        }  
+            transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+        }
     }
 }

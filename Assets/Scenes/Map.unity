@@ -873,6 +873,7 @@ MonoBehaviour:
   target: {fileID: 1246637681}
   offset: {x: 0, y: 1, z: -5}
   rotationSpeed: 3
+  Player: {fileID: 239706079}
 --- !u!114 &1128271491
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1550,7 +1551,7 @@ PrefabInstance:
     - target: {fileID: 876368482964882285, guid: 3c79ddeca1d26814faa41059ef759d1f,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.22
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 876368482964882285, guid: 3c79ddeca1d26814faa41059ef759d1f,
         type: 3}
